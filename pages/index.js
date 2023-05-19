@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 
 export default function Home(props) {
   const [loading, setLoading] = useState(false);
-  const [gotCookie, setGotCookie] = useState(false);
+  const [gotCookie, setGotCookie] = useState(!!props.cookies.MyCookie);
 
   useEffect(() => {
     if (loading && !gotCookie) {
@@ -10,6 +10,7 @@ export default function Home(props) {
         await fetch('./api/hello');
         setLoading(false);
         setGotCookie(true);
+        document.location.reload();
       };
       fetchCookie();
     }
@@ -19,24 +20,24 @@ export default function Home(props) {
     setLoading(true);
   });
 
-  const onClickRefresh = useCallback(() => {
+  const onClickDelete = useCallback(() => {
+    document.cookie = 'MyCookie=;path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT';
     document.location.reload();
   });
 
   return (
     <>
       <ol>
-        <li>Click on the "Get cookie" button and verify in the Network tab that we get the <b>Set-Cookie</b> header.</li>
+        <li>Click on the "Get cookie" button and verify in the Network tab that we get the <b>Set-Cookie</b> header from the request to <b>"/api/hello"</b>.</li>
         <li>Verify in the Application tab that we do have the cookie <b>MyCookie</b>.</li>
-        <li>Click on the "Verify server cookie" button to refresh the page.</li>
-        <li>Verify that we get the cookie in the frontend.</li>
+        <li>Verify that we get the cookie coming from the backend.</li>
       </ol>
       <br/>
-      <button onClick={onClickGet} disabled={gotCookie}>Get cookie</button>
+      <button onClick={onClickGet} disabled={loading || gotCookie}>{loading ? "Loading..." : "Get cookie" }</button>
       <br/>
-      {gotCookie ? <button onClick={onClickRefresh}>Verify server cookie</button> : null}
+      {gotCookie ? <button onClick={onClickDelete}>Delete cookie</button> : null}
       <br/>
-      {props.cookies.MyCookie ? <b>Got the cookie: {props.cookies.MyCookie}</b> : <b>No Cookie</b>}
+      {props.cookies.MyCookie ? <b>Got the cookie from the backend: {props.cookies.MyCookie}</b> : <b>No Cookie</b>}
     </>
   )
 }
