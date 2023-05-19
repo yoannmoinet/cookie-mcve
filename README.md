@@ -19,3 +19,9 @@ Follow page's instruction to verify we get the cookie.
 ## `pages/api/hello.js`
 
 Very basic API that simply set a cookie with the `Set-Cookie` header.
+
+## Deployed versions
+
+- Firebase Hosting: https://cookie-mcve.web.app/
+- Vercel: https://cookie-mcve.vercel.app/
+- Amplify: https://main.dr9bcmm7tnmx3.amplifyapp.com/
